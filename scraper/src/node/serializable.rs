@@ -29,7 +29,9 @@ pub(crate) fn serialize<S: Serializer>(
                         serializer.write_text(text)?;
                     }
                     Node::Element(ref elem) => {
-                        let attrs = elem.attrs.iter().map(|(k, v)| (k, &v[..]));
+                        let mut list = elem.attrs.iter().collect::<Vec<_>>();
+                        list.sort();
+                        let attrs = list.iter().map(|(k, v)| (k, &v[..]));
                         serializer.start_elem(elem.name.clone(), attrs)?;
                     }
                     _ => (),
